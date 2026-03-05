@@ -1,0 +1,9 @@
+moviepy>=2.0.0
+openai-whisper
+edge-tts
+openai
+pillow
+numpy
+requests
+torch
+setuptools
