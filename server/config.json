@@ -1,0 +1,5 @@
+{
+    "OPENAI_API_KEY": "YOUR_OPENAI_API_KEY",
+    "PEXELS_API_KEY": "YOUR_PEXELS_API_KEY",
+    "IMAGEMAGICK_BINARY": "path_to_imagemagick_binary_if_needed"
+}
