@@ -4,6 +4,7 @@ import asyncio
 import requests
 import edge_tts
 import whisper
+import hashlib
 from moviepy import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 import moviepy.video.fx as vfx
@@ -169,8 +170,12 @@ async def render_video(data):
 
         elif media_type == "pexels":
             if media_url:
-                local_filename = f"{TEMP_DIR}/pexels_{i}.mp4"
+                # Use a hash of the URL to avoid using old cached videos for different URLs at the same index
+                url_hash = hashlib.md5(media_url.encode()).hexdigest()
+                local_filename = f"{TEMP_DIR}/pexels_{url_hash}.mp4"
+                
                 if not os.path.exists(local_filename):
+                    print(f"Downloading Pexels video: {media_url}")
                     download_file(media_url, local_filename)
                 
                 bg_clip = VideoFileClip(local_filename)

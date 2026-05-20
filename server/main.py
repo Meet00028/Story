@@ -55,6 +55,8 @@ async def search_pexels(query: str, per_page: int = 15):
         response.raise_for_status()
         return response.json()
     except requests.RequestException as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 class StoryRequest(BaseModel):
@@ -67,17 +69,19 @@ async def generate_story(request: StoryRequest):
 
     prompt = f"""
     Write a short video script about: "{request.prompt}".
-    Return ONLY a JSON array of scenes. Each scene object must have:
+    Return a JSON object with a "scenes" key containing an array of scenes. Each scene object must have:
     - "text": The narration script (1-2 sentences).
     - "media_keyword": A keyword to search for visuals (e.g., "ocean", "city").
     - "transition": "fade" or "none".
     - "effect": "zoom_in" or "none".
     
     Example:
-    [
-        {{"text": "The ocean is vast and mysterious.", "media_keyword": "ocean waves", "transition": "fade", "effect": "zoom_in"}},
-        {{"text": "But what lies beneath?", "media_keyword": "underwater", "transition": "none", "effect": "none"}}
-    ]
+    {{
+        "scenes": [
+            {{"text": "The ocean is vast and mysterious.", "media_keyword": "ocean waves", "transition": "fade", "effect": "zoom_in"}},
+            {{"text": "But what lies beneath?", "media_keyword": "underwater", "transition": "none", "effect": "none"}}
+        ]
+    }}
     """
 
     try:
@@ -101,6 +105,8 @@ async def generate_story(request: StoryRequest):
             return []
             
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=500, detail=str(e))
 
 @app.post("/render")
